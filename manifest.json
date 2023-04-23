@@ -1,0 +1,24 @@
+{
+    "name": "VoiceGPT",
+    "version": "1.0.1",
+    "manifest_version": 3,
+    "description": "Adds speech to text functionality to openAIs ChatGPT site",
+    "action": {
+        "default_title": "VoiceGPT",
+        "default_popup": "index.html"
+    },
+    "icons": {
+      "16": "./assets/logo-16.png",
+      "32": "./assets/logo-32.png",
+      "48": "./assets/logo-48.png",
+      "128": "./assets/logo-128.png"
+    },
+    "content_scripts": [
+        {
+          "js": ["index.js"],
+          "matches": [
+            "https://chat.openai.com/*"
+          ]
+        }
+    ]
+}

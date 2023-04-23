@@ -1,0 +1,28 @@
+{
+  "name": "voice-gpt",
+  "version": "1.0.1",
+  "description": "Adds speech to text functionality to openAIs chatgpt site",
+  "scripts": {
+    "clearbuild": "rm -rf build",
+    "cp:popup": "cp src/popup/index.html build/index.html",
+    "cp:assets": "cp manifest.json build/manifest.json && cp -r src/assets build",
+    "build:app": "parcel build --no-source-maps --dist-dir build src/content/index.ts",
+    "build": "yarn clearbuild && yarn build:app && yarn cp:popup && yarn cp:assets",
+    "build:dev": "yarn clearbuild && NODE_ENV=development yarn build:app && yarn cp:popup && yarn cp:assets"
+  },
+  "keywords": [
+    "chatgpt",
+    "chat",
+    "gpt",
+    "voice"
+  ],
+  "author": "Craig White",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/dom-speech-recognition": "^0.0.1",
+    "@types/node": "^18.16.0",
+    "parcel": "^2.8.3",
+    "parcel-plugin-typescript": "^1.0.0",
+    "typescript": "^5.0.4"
+  }
+}
