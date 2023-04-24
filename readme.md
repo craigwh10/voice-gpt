@@ -1,10 +1,10 @@
 # VoiceGPT: ChatGPT web extension for voice to text
 
-**Version 1.0.1**
+**Version 1.0.2**
 
 This is a **very** early release of a fun side project I'm working on, it adds click to speak to ChatGPT.
 
-<img width="846" alt="Preview of the extension showing click to talk" src="https://user-images.githubusercontent.com/53788596/234070942-5e45b60c-8035-4bb6-b5d3-8474722f77fe.png">
+<img width="858" alt="example of the extension working" src="https://user-images.githubusercontent.com/53788596/234129943-dcf5a3f7-5427-4480-a59d-f7ec6a6b271c.png">
 
 ## To install
 
