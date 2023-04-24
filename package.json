@@ -1,6 +1,6 @@
 {
   "name": "voice-gpt",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Adds speech to text functionality to openAIs chatgpt site",
   "scripts": {
     "clearbuild": "rm -rf build",

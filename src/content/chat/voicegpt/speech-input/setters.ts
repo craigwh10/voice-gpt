@@ -14,8 +14,6 @@ export const addSpeechInputToForm = () => {
     speechInputElement.style.display = 'flex';
     speechInputElement.style.margin = 'auto';
     speechInputElement.style.flexDirection = 'column';
-    speechInputElement.style.paddingTop = '1rem';
-    speechInputElement.style.paddingBottom = '1rem';
     speechInputElement.style.background = '#1d1e20';
 
     form.parentElement?.appendChild(speechInputElement);

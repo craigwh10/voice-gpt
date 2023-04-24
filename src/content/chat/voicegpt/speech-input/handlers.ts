@@ -22,6 +22,7 @@ const handleSpeech = () => {
 
     const handleClickToStopVoice = () => {
         recognition.stop();
+        resetButtonStylesToDefault();
         removeListenerFromSpeechButton(handleClickToStopVoice);
     }
 
@@ -38,7 +39,7 @@ const handleSpeech = () => {
 
             if (circle && speakButton) {
                 addListenerToSpeechButton(handleClickToStopVoice);
-                speakButton.textContent = 'Stop speaking or click here to send';
+                speakButton.textContent = 'Click to finish';
                 circle.style.backgroundColor = 'red';
                 circle.style.animationName = 'flashcirclegpt-e4uurejk';
                 circle.style.animationPlayState = 'running';
