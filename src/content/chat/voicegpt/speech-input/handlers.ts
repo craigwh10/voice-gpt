@@ -2,16 +2,44 @@ import { getInput } from "../../chatgpt/text-field";
 import { getButton, getCircle } from "./element";
 import { setErrorMsgText, resetButtonStylesToDefault, addListenerToSpeechButton, removeListenerFromSpeechButton } from "./setters";
 
+let forceToStop = false;
+let isHoldingSpace = false;
+
 export const handleSpeechInput = (buttonEl: HTMLButtonElement) => {
     console.log('(handleSpeechInput) adding listener to ', buttonEl);
-    const handler = handleSpeech;
-    buttonEl.addEventListener('click', handler);
-    return handler;
+
+    buttonEl.addEventListener('click', handleSpeech);
+
+    window.addEventListener('keydown', (e: KeyboardEvent) => {
+        // if user is unfocused on anything dont run below code
+        if (document.activeElement !== document.body) return;
+
+        console.log('key pressed', e.key);
+        if (e.key === ' ') {
+            buttonEl.removeEventListener('click', handleSpeech);
+            isHoldingSpace = true;
+            handleSpeech();
+        }
+
+        // make it so if they let go it cancels the speech
+        window.addEventListener('keyup', (e: KeyboardEvent) => {
+            if (e.key === ' ') {
+                forceToStop = true;
+                buttonEl.addEventListener('click', handleSpeech);
+                resetButtonStylesToDefault();
+            }
+        }
+    )
+        
+    });
+
+    return handleSpeech;
 }
 
 let handleSpeechPaused = false;
 const handleSpeech = () => {
     if (handleSpeechPaused) return;
+
     const SpeechRecognition = window?.SpeechRecognition || webkitSpeechRecognition
     const SpeechGrammarList = window?.SpeechGrammarList || window?.webkitSpeechGrammarList
     const recognition = new SpeechRecognition();
@@ -19,10 +47,15 @@ const handleSpeech = () => {
     var speechRecognitionList = new SpeechGrammarList();
     recognition.grammars = speechRecognitionList;
 
-
     const handleClickToStopVoice = () => {
         recognition.stop();
         removeListenerFromSpeechButton(handleClickToStopVoice);
+    }
+
+    if (forceToStop) {
+        handleClickToStopVoice(); 
+        forceToStop = false;
+        isHoldingSpace = false;
     }
 
     recognition.start();
@@ -37,8 +70,8 @@ const handleSpeech = () => {
             const circle = getCircle();
 
             if (circle && speakButton) {
-                addListenerToSpeechButton(handleClickToStopVoice);
-                speakButton.textContent = 'Stop speaking or click here to send';
+                !isHoldingSpace && addListenerToSpeechButton(handleClickToStopVoice);
+                speakButton.textContent = isHoldingSpace ? 'Let go of space to send' : 'Stop speaking or click here to send';
                 circle.style.backgroundColor = 'red';
                 circle.style.animationName = 'flashcirclegpt-e4uurejk';
                 circle.style.animationPlayState = 'running';

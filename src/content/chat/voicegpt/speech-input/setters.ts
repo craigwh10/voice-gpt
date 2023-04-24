@@ -1,7 +1,7 @@
 import { getWrapperForm } from "../../chatgpt/text-field";
-import { getButton, getCircle, getError, speechInput } from "./element";
+import { defaultButtonHTML, getButton, getCircle, getError, speechInput } from "./element";
 
-export const addSpeechInputToForm = () => {
+export const addSpeechInputToForm = (textToShow?: string) => {
     const form = getWrapperForm();
 
     if (!form) {
@@ -28,7 +28,7 @@ export const resetButtonStylesToDefault = () => {
     const circleEl = getCircle();
 
     if (speakButtonEl && circleEl) {
-        speakButtonEl.textContent = 'Click to speak';
+        speakButtonEl.innerHTML = defaultButtonHTML;
         circleEl.style.animationPlayState = 'paused';
         circleEl.style.backgroundColor = 'grey';
         circleEl.style.animationName = '';
