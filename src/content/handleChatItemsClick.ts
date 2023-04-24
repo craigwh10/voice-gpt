@@ -3,7 +3,11 @@ import { getButton } from "./chat/voicegpt/speech-input/element";
 
 export const handleChatItemsClick = () => {
     setTimeout(() => {
-        const chatGptNavigationChatList = document.querySelectorAll<HTMLAnchorElement>('nav > div:first-of-type a');
+        const chatGptNavigationChatList = document.querySelector<HTMLAnchorElement>('nav a:nth-of-type(2)')?.parentElement?.querySelectorAll('a');
+
+        if (!chatGptNavigationChatList) {
+            throw new Error('dont worry, chatgpt removed the add chat button or its changed please raise this as an issue!')
+        }
 
         const onClickNavChatListHandler = (chatNavigationEl: HTMLAnchorElement) => {
             console.log('(onClickNavChatListHandler) clicked nav chat list item ', chatNavigationEl)
@@ -13,7 +17,7 @@ export const handleChatItemsClick = () => {
 
                 console.log('(onClickNavChatListHandler) deciding whether to ', chatNavigationEl, { wasClickedAlready, button: getButton() });
                 if (wasClickedAlready || getButton()) {
-                    console.log('n(onClickNavChatListHandler) not allowing the click because', {wasClickedAlready, button: getButton() })
+                    console.log('(onClickNavChatListHandler) not allowing the click because', {wasClickedAlready, button: getButton() })
                     return; // do not allow duplicate clicks
                 }
     
