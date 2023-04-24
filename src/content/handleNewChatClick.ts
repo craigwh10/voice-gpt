@@ -1,36 +1,31 @@
-import { getInput, getWrapperForm } from "./chat/chatgpt/text-field";
+import { getWrapperForm } from "./chat/chatgpt/text-field";
 import { getButton } from "./chat/voicegpt/speech-input/element";
-import { delayToAddSpeechButton, HandlerManager, timeToWaitForLoadMS } from "./HandlerManager";
+import { HandlerManager, timeToWaitForLoadMS } from "./HandlerManager";
+import { submitHandler } from "./handleSubmitEvent";
 
 export const handleNewChatClick = () => {
     setTimeout(() => {
         const addNewChatButton = document.querySelector<HTMLAnchorElement>('nav > a');
-
-        console.log('addnewchat- adding click listener to', addNewChatButton)
 
         if (!addNewChatButton) {
             throw new Error('dont worry, chatgpt removed the add chat button or its changed please raise this as an issue!')
         }
 
         const newChatClickHandler = () => {
+            console.log('(newChatClickHandler) new chat button clicked');
             setTimeout(() => {
-                console.log('clicked new chat button');
-
+                console.log('(newChatClickHandler) timeout hit, checking if new chat button clicked - ', HandlerManager.newChatButtonClicked)
                 if (HandlerManager.newChatButtonClicked || getButton()) {
-                    console.log('not doing new chat handler has already clicked or has speech thang there (possibly from a load).')
+                    console.log('(newChatClickHandler) new chat button clicked or button already added, returning', HandlerManager.newChatButtonClicked, getButton());
                     return;
                 }
     
                 HandlerManager.setNewChatButtonClicked(true);
     
                 // need to flush the listeners here - otherwise the navlinks you click their handlers get called.
-    
                 HandlerManager.clearAllNavLinkHandlers();
-    
                 HandlerManager.clearAllNavClickSpeechListeners();
     
-    
-                console.log('adding new listener to (because of click on new chat) - ', addNewChatButton);
                 HandlerManager.addNewSpeechListenerToElOnTimeout(addNewChatButton);
     
                 const form = getWrapperForm();
@@ -39,52 +34,10 @@ export const handleNewChatClick = () => {
                     throw new Error('no form');
                 }
     
-               const submitHandler = (e: KeyboardEvent | MouseEvent) => {
-                    console.log('submit handler hit, trying for event - ', e);
-                    const input = getInput()!;
-            
-                    console.log('submit handler - input - ', input)
-            
-                    if (e instanceof MouseEvent && e.button === 0 && input.textContent!.length > 0) {
-                        console.log('hit the button now adding el to form')
-                        HandlerManager.addNewSpeechListenerToElOnTimeout(addNewChatButton, delayToAddSpeechButton * 2);
-                        setTimeout(() => {
-                            document.removeEventListener('click', submitHandler)
-                            document.removeEventListener('keypress', submitHandler)
-                        }, 2000)
-            
-                        return;
-                    }
-            
-                    if (e instanceof KeyboardEvent ) {
-                        // 400 is the code for speech input referenced in handlers for chatgpt
-                        // used detail as it's not used for KeyboardEvent, and we still need Enter key to submit.
-                        if (e.key === 'Enter' && e.detail === 400) {
-                            console.log('hit speech enter now adding el to form')
-                            HandlerManager.addNewSpeechListenerToElOnTimeout(addNewChatButton, delayToAddSpeechButton * 2);
-                            setTimeout(() => {
-                                document.removeEventListener('click', submitHandler)
-                                document.removeEventListener('keypress', submitHandler)
-                            }, 2000)
-                            return;
-                        }
-            
-                        if (e.key === 'Enter' && input.textContent!.length > 0) {
-                            console.log('hit enter now adding el to form')
-                            HandlerManager.addNewSpeechListenerToElOnTimeout(addNewChatButton, delayToAddSpeechButton * 2);
-                            setTimeout(() => {
-                                document.removeEventListener('click', submitHandler)
-                                document.removeEventListener('keypress', submitHandler)
-                            }, 2000)
-                        }
-            
-                        return;
-                    }
-                }
-    
                 // submission events:
     
                 // // enter button
+                console.log('(newChatClickHandler) adding keydown listener to form', form);
                 form.addEventListener('keydown', submitHandler)
     
                 // alas not an actual type='submit' button hence why we have to do this.
@@ -95,6 +48,8 @@ export const handleNewChatClick = () => {
                 }
     
                 // // click to submit
+
+                console.log('(newChatClickHandler) adding click listener to submit button', submitButton);
                 submitButton.addEventListener('click', submitHandler); 
             }, timeToWaitForLoadMS)           
         }

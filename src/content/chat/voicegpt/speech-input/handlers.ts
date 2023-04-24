@@ -3,6 +3,7 @@ import { getButton, getCircle } from "./element";
 import { setErrorMsgText, resetButtonStylesToDefault, addListenerToSpeechButton, removeListenerFromSpeechButton } from "./setters";
 
 export const handleSpeechInput = (buttonEl: HTMLButtonElement) => {
+    console.log('(handleSpeechInput) adding listener to ', buttonEl);
     const handler = handleSpeech;
     buttonEl.addEventListener('click', handler);
     return handler;

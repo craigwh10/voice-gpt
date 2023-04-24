@@ -4,16 +4,16 @@ import { getButton } from "./chat/voicegpt/speech-input/element";
 export const handleChatItemsClick = () => {
     setTimeout(() => {
         const chatGptNavigationChatList = document.querySelectorAll<HTMLAnchorElement>('nav > div:first-of-type a');
-        console.log('adding nav item click listeners');
 
         const onClickNavChatListHandler = (chatNavigationEl: HTMLAnchorElement) => {
+            console.log('(onClickNavChatListHandler) clicked nav chat list item ', chatNavigationEl)
             setTimeout(() => {
-                console.log('tryna click nav chat list item')
                 const existingHandlerMap = HandlerManager.navLinkHandlerMap.get(chatNavigationEl.textContent!);
-                const wasClickedAlready = existingHandlerMap?.wasClicked === true
-                console.log('tryna click chatlisthandler - ', {wasClickedAlready, button: getButton() })
+                const wasClickedAlready = existingHandlerMap?.wasClicked === true;
+
+                console.log('(onClickNavChatListHandler) deciding whether to ', chatNavigationEl, { wasClickedAlready, button: getButton() });
                 if (wasClickedAlready || getButton()) {
-                    console.log('not allowing the click because', {wasClickedAlready, button: getButton() })
+                    console.log('n(onClickNavChatListHandler) not allowing the click because', {wasClickedAlready, button: getButton() })
                     return; // do not allow duplicate clicks
                 }
     
@@ -25,15 +25,16 @@ export const handleChatItemsClick = () => {
     
                 // set this as active if clicked
                 chatNavigationEl.setAttribute('vgpt-active-tab', 'true'); // mainly for debugging purposes.
-                console.log('clicked nav item in list');
     
                 // clear all existing speech handlers for cleanup.
                 HandlerManager.clearAllNavClickSpeechListeners();
     
+                console.log('(onClickNavChatListHandler) adding new speech listener to ', chatNavigationEl);
                 HandlerManager.addNewSpeechListenerToElOnTimeout(chatNavigationEl);
             }, timeToWaitForLoadMS)
         }
 
+        console.log('(handleChatItemsClick) adding click listener to', chatGptNavigationChatList);
         chatGptNavigationChatList.forEach((chatNavigationEl) => {
             chatNavigationEl.setAttribute('has-vgpt-listener', 'true');
             const individualChatLinkHandler = () => onClickNavChatListHandler(chatNavigationEl);

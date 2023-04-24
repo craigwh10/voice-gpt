@@ -29,24 +29,25 @@ window.onload = function () {
      */
     let urlState = window.location.href;
     setInterval(() => {
-        // const urlOnInterval = window.location.href;
-
         setTimeout(() => {
             const urlOnPossibleLoad = window.location.href;
 
-            if (isFirstRender && isOnlyBaseUrl() && !landedOnFirstPageHandled) { // If a user lands on chatgpt initial page.
+            const userLandsOnFirstPage = isFirstRender && isOnlyBaseUrl() && !landedOnFirstPageHandled;
+            if (userLandsOnFirstPage) {
+                console.log('(onload) user landed on first page, handling new chat');
                 handleNewChatTextField();
                 landedOnFirstPageHandled = true;
             }
 
             // On nav state state, we regenerate the handlers for nav items and new chat.
-            if (urlOnPossibleLoad !== urlState) {
+            const urlChanged = urlOnPossibleLoad !== urlState;
+            if (urlChanged) {
+                console.log('(onload) url changed, regenerating handlers');
                 isFirstRender = false;
                 HandlerManager.clearAllNavLinkHandlers(); // as dom can reset
                 HandlerManager.clearAllNavClickSpeechListeners(); // as dom can reset
                 HandlerManager.clearNewChatHandler(); // so that on change we always have a fresh new chat handler
-                HandlerManager.setNewChatButtonClicked(false);
-                // additionally I'll need to clear all the click listeners from the dissapeared nav a's
+                HandlerManager.setNewChatButtonClicked(false); // to allow user to click new button again if this is valid
 
                 handleChatItemsClick();
                 handleNewChatClick();
@@ -56,23 +57,19 @@ window.onload = function () {
     })
 
     /**
-     * PURELY ON LOAD ADD LISTENERS
+     * PURELY ON LOAD PAGE
      */
     handleChatItemsClick();
-
-    // handleJustLoadedApp
     handleOnLoad();
-
-    // captcha sitch
-    // here I need to check if there is a <table> component, if there is then I dont run handleOnLoad, if there isnt a table on document then I run handleOnLoad
-
-    // handleNewChatClick
     handleNewChatClick();
+
+    // here I need to check if there is a <table> component, if there is then I dont run handleOnLoad, if there isnt a table on document then I run handleOnLoad
 }
 
 window.onbeforeunload = function () {
-    HandlerManager.clearAllNavLinkHandlers(); // as dom can reset
-    HandlerManager.clearAllNavClickSpeechListeners(); // as dom can reset
-    HandlerManager.clearNewChatHandler(); // so that on change we always have a fresh new chat handler
+    console.log('(onbeforeunload) clearing all handlers');
+    HandlerManager.clearAllNavLinkHandlers();
+    HandlerManager.clearAllNavClickSpeechListeners();
+    HandlerManager.clearNewChatHandler();
     HandlerManager.setNewChatButtonClicked(false);
 }
