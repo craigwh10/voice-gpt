@@ -28,34 +28,37 @@ export const HandlerManager: Helpers = {
     newChatHandler: null,
     newChatButtonClicked: false,
     setNewChatButtonClicked: function (val) {
+        console.log(`(setNewChatButtonClicked)`, val);
         this.newChatButtonClicked = val;
     },
     clearNewChatHandler: function () {
-        console.log('new chat handler removed');
+        console.log(`(clearNewChatHandler)`, this.newChatHandler);
         this.newChatHandler?.newChatEl.removeEventListener('click', this.newChatHandler.onClickHandler);
     },
     clearAllNavClickSpeechListeners: function () {
         Array.from(this.speechHandlerMap.entries()).forEach(([key, handler]) => {
-            console.log('deleting speech listener for nav - ', handler, key);
+            console.log(`(clearAllNavClickSpeechListeners) individual-item`, handler, key);
             handler.speechButton.removeEventListener('click', handler.speechButtonHandler);
             this.speechHandlerMap.delete(key);
         })
     },
     clearAllNavLinkHandlers: function () {
         Array.from(this.navLinkHandlerMap.entries()).forEach(([key, handler]) => {
-            console.log('deleting', handler, key);
+            console.log(`(clearAllNavLinkHandlers) individual-item`, handler, key);
             handler.navEl.removeEventListener('click', handler.onClickHandler);
             this.navLinkHandlerMap.delete(key);
         })
     },
     addNewSpeechListenerToElOnTimeout: function (el, timeout = delayToAddSpeechButton) {
-        console.log('addin speech listner for el')
+        console.log(`(addNewSpeechListenerToElOnTimeout) trying`, el, timeout);
         const newChatLoad = setTimeout(() => { // wait for new page to load
             const speechButton = addSpeechInputToForm()!;
             const speechButtonHandler = handleSpeechInput(speechButton);
-            console.log('added speech listener for el');
+            console.log(`(addNewSpeechListenerToElOnTimeout) added to`, speechButton);
+
             // assumption, always has text content (observed).
             this.speechHandlerMap.set(el.textContent!, { speechButton, speechButtonHandler })
+            console.log(`(addNewSpeechListenerToElOnTimeout) set handler for`, el.textContent!);
             clearTimeout(newChatLoad);
         }, timeout)
     },
@@ -66,7 +69,9 @@ export const HandlerManager: Helpers = {
         const handlerRes = this.speechHandlerMap.get('new-load');
     
         handlerRes?.speechButton.removeEventListener('click', handlerRes.speechButtonHandler);
-    
+        
+        console.log(`(clearJustLoadedListener) event listener and handler removed for `, handlerRes?.speechButton);
+
         this.speechHandlerMap.delete('new-load');
     }
 }
