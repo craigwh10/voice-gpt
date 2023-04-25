@@ -1,7 +1,7 @@
 import { HandlerManager, timeToWaitForLoadMS } from "./HandlerManager";
 import { getButton } from "./chat/voicegpt/speech-input/element";
 
-export const handleChatItemsClick = () => {
+export const addClickListenerHandlersToChatItems = () => {
     setTimeout(() => {
         const chatGptNavigationChatList = document.querySelector<HTMLAnchorElement>('nav a:nth-of-type(2)')?.parentElement?.querySelectorAll('a');
 

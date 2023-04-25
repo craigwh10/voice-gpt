@@ -3,7 +3,7 @@ import { getButton } from "./chat/voicegpt/speech-input/element";
 import { HandlerManager, timeToWaitForLoadMS } from "./HandlerManager";
 import { submitHandler } from "./handleSubmitEvent";
 
-export const handleNewChatClick = () => {
+export const addClickListenerHandlerToNewChatButton = () => {
     setTimeout(() => {
         const addNewChatButton = document.querySelector<HTMLAnchorElement>('nav > a');
 

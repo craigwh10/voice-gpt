@@ -1,5 +1,5 @@
-import { handleChatItemsClick } from "./handleChatItemsClick";
-import { handleNewChatClick } from "./handleNewChatClick";
+import { addClickListenerHandlersToChatItems } from "./addClickListenerHandlersToChatItems";
+import { addClickListenerHandlerToNewChatButton } from "./addClickListenerHandlerToNewChatButton";
 import { handleNewChatTextField } from "./handleNewChatTextField";
 import { handleOnLoad } from "./handleOnLoad";
 import { HandlerManager, timeToWaitForLoadMS } from "./HandlerManager";
@@ -49,8 +49,8 @@ window.onload = function () {
                 HandlerManager.clearNewChatHandler(); // so that on change we always have a fresh new chat handler
                 HandlerManager.setNewChatButtonClicked(false); // to allow user to click new button again if this is valid
 
-                handleChatItemsClick();
-                handleNewChatClick();
+                addClickListenerHandlersToChatItems();
+                addClickListenerHandlerToNewChatButton();
                 urlState = urlOnPossibleLoad;
             }
         }, timeToWaitForLoadMS);
@@ -59,11 +59,9 @@ window.onload = function () {
     /**
      * PURELY ON LOAD PAGE
      */
-    handleChatItemsClick();
+    addClickListenerHandlersToChatItems();
     handleOnLoad();
-    handleNewChatClick();
-
-    // here I need to check if there is a <table> component, if there is then I dont run handleOnLoad, if there isnt a table on document then I run handleOnLoad
+    addClickListenerHandlerToNewChatButton();
 }
 
 window.onbeforeunload = function () {
